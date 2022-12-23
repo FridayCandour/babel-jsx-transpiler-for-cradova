@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "lib": ["ES2021", "DOM"],
+    "moduleResolution": "Node"
+  },
+  "exclude": ["node_modules"]
+}
