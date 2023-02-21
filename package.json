@@ -2,9 +2,9 @@
   "name": "cradova_babel_repl",
   "version": "0.1.0",
   "dependencies": {
-    "@babel/standalone": "^7.8.8",
-    "cradova": "^1.0.5",
-    "vite": "^4.0.3",
+    "@babel/standalone": "^7.21.1",
+    "cradova": "^1.5.0",
+    "vite": "^4.1.3",
     "homepage": "."
   },
   "scripts": {

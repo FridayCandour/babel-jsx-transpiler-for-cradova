@@ -14,19 +14,18 @@ const AppComp = new Ref(function (this: RefType) {
   function generateResult(value) {
     try {
       let result: String = babel.transform(value, {
-        presets: ["env", "react"],
-        // filename: "/App.js",
+        presets: ["react"],
       }).code;
-      result = JSON.parse(JSON.stringify(result.replaceAll("null,", "")));
-      result = JSON.parse(
-        JSON.stringify(
-          result.replaceAll("/*#__PURE__*/React.createElement", `_`)
-        )
-      );
+      result = result.replaceAll("null,", "");
+      if (result.includes("null")) {
+        result = result.replaceAll(", null", "");
+      }
+      result = result.replaceAll("/*#__PURE__*/React.createElement", `_`);
       signal.setKey("output", result);
       signal.setKey("errorMsg", "");
     } catch (e) {
-      signal.setKey("errorMsg", e.message);
+      signal.setKey("output", "");
+      signal.setKey("errorMsg", e.toString());
     }
     self.updateState({});
   }
@@ -34,7 +33,7 @@ const AppComp = new Ref(function (this: RefType) {
   function handleInputChange(event) {
     const value = event.target.value;
     signal.setKey("input", value);
-    setInterval(() => {
+    setTimeout(() => {
       generateResult(value);
     }, 800);
   }
@@ -46,10 +45,7 @@ const AppComp = new Ref(function (this: RefType) {
     _("h1|Babel Transpiler for Cradova"),
     _("h2|Coverts html and jsx to vanilla javascript"),
     Input({ input, handleInputChange, errorMsg }),
-    Output({
-      output,
-      hasError: errorMsg,
-    })
+    Output({ output })
   );
 });
 const App = new Screen({

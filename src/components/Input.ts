@@ -7,7 +7,7 @@ const Input = ({ input, handleInputChange, errorMsg }) => {
       placeholder: "Write code here",
       value: input,
       onchange: handleInputChange,
-      oninput: handleInputChange,
+      // oninput: handleInputChange,
     }),
     assert(errorMsg, _("div.error", Error({ errorMsg })))
   );
