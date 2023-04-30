@@ -41,14 +41,7 @@ h1 {
 .output-box:focus {
   outline: none;
 }
-.error {
-  position: absolute;
-  z-index: 1;
-  width: 97%;
-  left: 0;
-  bottom: 0;
-  border: 1px solid #ccc;
-}
+
 .errorMsg {
   background: #fff0f0;
   color: #ff0000;

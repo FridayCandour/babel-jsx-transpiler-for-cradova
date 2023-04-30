@@ -15,5 +15,5 @@ echo ""
 echo  "${cyan} updating cradova locally ...${clear}"
  npm rm cradova --force
 echo ""
-npm i ~/cradova-2.1.2.tgz --force
+npm i ~/cradova-2.2.0.tgz --force
 echo "done!"

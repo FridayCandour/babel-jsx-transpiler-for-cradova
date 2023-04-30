@@ -3,10 +3,9 @@ import * as babel from "@babel/standalone";
 import Input from "./components/Input";
 import Output from "./components/Output";
 import "./styles.css";
-const AppComp = new Ref(function (this: Ref<any>) {
-  const self: Ref<any> = this;
+const template = () => {
   const signal = new createSignal(
-    { input: "", output: "", errorMsg: "" },
+    { input: "", output: "" },
     { persistName: "babel_code" }
   );
 
@@ -17,66 +16,56 @@ const AppComp = new Ref(function (this: Ref<any>) {
       }).code;
       // replacements
       result = result.replaceAll(";", "");
+      result = result.replaceAll('", ', `(`);
+      result = result.replaceAll(", {", `({`);
+      result = result.replaceAll('"({', "({");
       result = result.replaceAll("null,", "");
-      result = result.replaceAll(", null", "");
+      result = result.replaceAll("(null)", "");
       result = result.replaceAll("class:", "className:");
       result = result.replaceAll('/*#__PURE__*/React.createElement("', ``);
-      result = result.replaceAll('", ', `(`);
-      result = result.replaceAll("data-", `$`);
+      if (result.lastIndexOf(".") > -1) {
+        result = result.replaceAll("/*#__PURE__*/React.createElement(", ``);
+        result = result.replaceAll(", ", `(`);
+        result = result.replaceAll(")(", `), `);
+        result = result.replaceAll("}(", `}, `);
+      }
+      // result = result.replaceAll("data-", `$`);
       //
       signal.setKey(
         "output",
         result +
           `
-
-
-
-
-
-
-
+          
 
 `
       );
-      signal.setKey("errorMsg", "");
+      Output.updateState({ output: signal.value.output, error: false });
     } catch (e) {
-      signal.setKey("output", "");
-      signal.setKey("errorMsg", e.toString());
+      signal.setKey("output", e.toString());
+      Output.updateState({ output: signal.value.output, error: true });
     }
-    self.updateState({});
   }
 
   function handleInputChange(event) {
-    const value =
-      event.target.value +
-      `
-
-
-
-
-
-
-
-
-`;
+    const value = event.target.value + ``;
     signal.setKey("input", value);
     setTimeout(() => {
       generateResult(value);
-    }, 500);
+    }, 400);
   }
-  const errorMsg = signal.value.errorMsg;
+
   const input = signal.value.input;
   const output = signal.value.output;
   return div(
     _("h1|A jsx and html to cradova transpiler using babel"),
     _("h2|Coverts html and jsx to vanilla javascript"),
-    Input({ input, handleInputChange, errorMsg }),
-    Output({ output })
+    Input.render({ input, handleInputChange }),
+    Output.render({ output, error: false })
   );
-});
+};
 const App = new Screen({
   name: "Cradova Babel Transpiler",
-  template: () => AppComp.render({}),
+  template,
 });
 
 export default App;
