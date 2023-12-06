@@ -14,22 +14,34 @@ const template = () => {
       let result: String = babel.transform(value, {
         presets: ["react"],
       }).code;
-      // replacements
+      // nomalise
+      result = result.replaceAll("\n", "");
+      //? cradova 2.0 replacements (no element tags)
       result = result.replaceAll(";", "");
-      result = result.replaceAll('", ', `(`);
-      result = result.replaceAll(", {", `({`);
-      result = result.replaceAll('"({', "({");
       result = result.replaceAll("null,", "");
-      result = result.replaceAll("(null)", "");
+      result = result.replaceAll("(null)", "()");
       result = result.replaceAll("class:", "className:");
-      result = result.replaceAll('/*#__PURE__*/React.createElement("', ``);
+      result = result.replaceAll('/*#__PURE__*/React.createElement("', `_("`);
       if (result.lastIndexOf(".") > -1) {
-        result = result.replaceAll("/*#__PURE__*/React.createElement(", ``);
-        result = result.replaceAll(", ", `(`);
-        result = result.replaceAll(")(", `), `);
-        result = result.replaceAll("}(", `}, `);
+        result = result.replaceAll("/*#__PURE__*/React.createElement(", `_("`);
       }
-      // result = result.replaceAll("data-", `$`);
+      //? cradova 3.0 replacements (element tags)
+      const results = result.split(`_("`);
+      for (let index = 0; index < results.length; index++) {
+        const element = results[index];
+        const tage = element.indexOf(`",`);
+        if (tage > -1) {
+          results[index] = element.replace(`",`, "(");
+        }
+      }
+      result = results.join("");
+      // result = result.replaceAll("null,", "");
+      // result = result.replaceAll("(null)", "()");
+      // result = result.replaceAll("class:", "className:");
+      // result = result.replaceAll('/*#__PURE__*/React.createElement("', `_("`);
+      // if (result.lastIndexOf(".") > -1) {
+      //   result = result.replaceAll("/*#__PURE__*/React.createElement(", `_("`);
+      // }
       //
       signal.setKey(
         "output",
