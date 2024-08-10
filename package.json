@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "dependencies": {
     "@babel/standalone": "^7.21.1",
-    "cradova": "file:../../cradova-3.1.3.tgz",
-    "naxtjs": "file:../../naxtjs-1.2.0.tgz",
+    "cradova": "^3.1.3",
+    "naxtjs": "^1.3.4",
     "vite": "^4.1.3"
   },
   "scripts": {
